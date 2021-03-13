@@ -8,8 +8,9 @@ async function getFetch(query, page) {
 
   const response = await axios.get(url);
   const data = await response.data;
-  const hits = await data.hits;
-  return hits;
+  // console.log(data);
+  // const hits = await data.hits;
+  return data;
 }
 
 export default { getFetch };

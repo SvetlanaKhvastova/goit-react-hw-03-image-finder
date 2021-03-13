@@ -14,9 +14,11 @@ class App extends Component {
     query: '',
     page: 1,
     perPage: 12,
+    totalHits: null,
     gallery: [],
     msg: '',
     error: '',
+    isLoading: false,
   };
 
   // async componentDidMount() {
@@ -30,8 +32,8 @@ class App extends Component {
   // }
 
   componentDidUpdate(prevProps, prevState) {
-    const { query } = this.state;
-    if (query !== prevState.query) {
+    const { query, page } = this.state;
+    if (query !== prevState.query || page !== prevState.page) {
       this.fetchGallery();
     }
   }
@@ -39,12 +41,14 @@ class App extends Component {
   fetchGallery = () => {
     const { query, page, gallery } = this.state;
 
+    this.setState({ isLoading: true });
     getFetch(query, page)
-      .then(result => {
-        if (result.length) {
+      .then(({ hits, totalHits }) => {
+        if (hits.length) {
           this.setState({
-            gallery: [...gallery, ...result],
+            gallery: [...gallery, ...hits],
             msg: '',
+            totalHits,
           });
           if (page !== 1) {
             window.scrollTo({
@@ -61,12 +65,14 @@ class App extends Component {
           gallery: [],
           error: 'error',
         });
-      });
+      })
+      .finally(this.setState({ isLoading: true }));
   };
 
   onSubmitForm = searchQuery => {
     this.setState(({ query }) => {
       if (query === searchQuery) return;
+
       return {
         query: searchQuery,
         page: 1,
@@ -80,24 +86,27 @@ class App extends Component {
   };
 
   clickBtn = () => {
-    console.log(`Button`);
+    // console.log(`Button`);
     this.incrementPage();
   };
 
   render() {
-    const { gallery, msg } = this.state;
+    const { gallery, msg, page, perPage, totalHits, isLoading } = this.state;
     const { clickBtn, onSubmitForm } = this;
 
     return (
       <div className={s.App}>
         <Searchbar onSubmit={onSubmitForm} />
 
-        {msg && <p>{msg}</p>}
+        {isLoading && <Spinner />}
+
+        {msg && <Spinner /> && <p>{msg}</p>}
+
         <ImageGallery gallery={gallery} />
 
-        {gallery.length > 0 && <Button onClickBtn={clickBtn} />}
-
-        {gallery.length > 12 && <Spinner />}
+        {gallery.length > 0 && totalHits > page * perPage && (
+          <Button onClickBtn={clickBtn} />
+        )}
       </div>
     );
   }

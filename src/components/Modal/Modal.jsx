@@ -8,29 +8,29 @@ const modalRoot = document.getElementById('root-modal');
 class Modal extends Component {
   state = {};
 
-  componentDidMount() {
+  componentDidMount = () => {
+    const { handleEsc } = this;
+    window.addEventListener('keydown', handleEsc);
+  };
+
+  componentWillUnmount = () => {
     const { handleEsc } = this;
     window.removeEventListener('keydown', handleEsc);
-  }
+  };
 
-  componentWillUnmount() {
-    const { handleEsc } = this;
-    window.removeEventListener('keydown', handleEsc);
-  }
-
-  handleEsc(e) {
+  handleEsc = e => {
     const { onClose } = this.props;
     if (e.code === 'Escape') {
       onClose();
     }
-  }
+  };
 
-  handleCloseModal(e) {
+  handleCloseModal = e => {
     const { onClose } = this.props;
     if (e.target === e.currentTarget) {
       onClose();
     }
-  }
+  };
 
   render() {
     const { handleCloseModal } = this;
@@ -47,7 +47,6 @@ class Modal extends Component {
 
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
-  handleCloseModal: PropTypes.func.isRequired,
 };
 
 export default Modal;

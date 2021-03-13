@@ -19,15 +19,15 @@ class ImageGallery extends Component {
     }));
   };
 
-  getElem(largeSrc, largeAlt) {
-    console.log(`OOOOO`);
+  getElem = (largeSrc, largeAlt) => {
+    // console.log(`OOOOO`);
     this.toggleModal();
 
     this.setState({
       largeSrc,
       largeAlt,
     });
-  }
+  };
 
   render() {
     const { gallery } = this.props;
@@ -64,7 +64,6 @@ ImageGallery.propTypes = {
       id: PropTypes.number.isRequired,
     }),
   ),
-  // toggleModal: PropTypes.func.isRequired,
 };
 
 export default ImageGallery;
