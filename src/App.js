@@ -98,8 +98,6 @@ class App extends Component {
       <div className={s.App}>
         <Searchbar onSubmit={onSubmitForm} />
 
-        {isLoading && <Spinner />}
-
         {msg && <Spinner /> && <p>{msg}</p>}
 
         <ImageGallery gallery={gallery} />
@@ -107,6 +105,8 @@ class App extends Component {
         {gallery.length > 0 && totalHits > page * perPage && (
           <Button onClickBtn={clickBtn} />
         )}
+
+        {isLoading && <Spinner />}
       </div>
     );
   }
