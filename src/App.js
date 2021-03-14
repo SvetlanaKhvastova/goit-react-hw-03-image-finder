@@ -66,7 +66,7 @@ class App extends Component {
           error: 'error',
         });
       })
-      .finally(this.setState({ isLoading: true }));
+      .finally(() => this.setState({ isLoading: false }));
   };
 
   onSubmitForm = searchQuery => {
